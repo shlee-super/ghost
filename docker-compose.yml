@@ -7,6 +7,7 @@ services:
       - "2368"
     environment:
       url: https://leecod.ing
+      database__client: sqlite3
     volumes:
       - ./content:/var/lib/ghost/content
     networks:
