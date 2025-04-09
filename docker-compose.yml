@@ -8,6 +8,8 @@ services:
     environment:
       url: https://leecod.ing
       database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/data/ghost.db
+      paths__contentPath: /var/lib/ghost/content
     volumes:
       - ./content:/var/lib/ghost/content
     networks:
