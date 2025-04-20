@@ -11,7 +11,7 @@ services:
       database__connection__filename: /var/lib/ghost/content/data/ghost.db
       paths__contentPath: /var/lib/ghost/content
     volumes:
-      - ./content:/var/lib/ghost/content
+      - ./data/ghost:/var/lib/ghost
     networks:
       - ghost-network
 
