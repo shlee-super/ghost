@@ -7,9 +7,12 @@ services:
       - "2368"
     environment:
       url: https://leecod.ing
-      database__client: sqlite3
-      database__connection__filename: /var/lib/ghost/content/data/ghost.db
-      paths__contentPath: /var/lib/ghost/content
+      database__client: mysql2
+      database__connection__host: 10.0.1.224
+      database__connection__port: 3306
+      database__connection__user: admin
+      database__connection__password: Database1059!@!
+      database__connection__database: ghost
     volumes:
       - ./data/ghost:/var/lib/ghost
     networks:
