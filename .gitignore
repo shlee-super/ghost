@@ -19,7 +19,13 @@ data/
 content/themes/*/data/
 content/settings/*.db
 
-# SSL is handled by external load balancer - no certbot needed
+# SSL certificates and sensitive data (handled by external load balancer)
+# Note: certbot directory not needed for load balancer environment
+certbot/
+
+# Theme symbolic links (pointing to Ghost container internals)
+content/themes/casper
+content/themes/source
 
 # Nginx logs (if any)
 nginx/logs/
