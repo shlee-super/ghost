@@ -1,0 +1,65 @@
+# Ghost Blog Docker Setup - .gitignore
+
+# Ghost runtime data that should not be committed
+content/data/
+content/logs/
+content/files/
+content/images/
+content/media/
+content/public/
+
+# Data directory (contains runtime data and Ghost versions)
+data/
+
+# Keep only theme and settings
+!content/themes/
+!content/settings/
+
+# But exclude any potential data files in these directories
+content/themes/*/data/
+content/settings/*.db
+
+# SSL certificates and sensitive data
+certbot/conf/accounts/
+certbot/conf/archive/
+certbot/conf/live/
+certbot/conf/renewal/
+certbot/www/
+
+# Nginx logs (if any)
+nginx/logs/
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker volumes and cache
+.docker/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Node modules (if any local development)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
