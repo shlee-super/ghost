@@ -19,12 +19,7 @@ data/
 content/themes/*/data/
 content/settings/*.db
 
-# SSL certificates and sensitive data
-certbot/conf/accounts/
-certbot/conf/archive/
-certbot/conf/live/
-certbot/conf/renewal/
-certbot/www/
+# SSL is handled by external load balancer - no certbot needed
 
 # Nginx logs (if any)
 nginx/logs/

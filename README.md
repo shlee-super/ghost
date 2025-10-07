@@ -5,8 +5,9 @@
 ## 구성 요소
 
 - **Ghost**: 블로그 플랫폼 (포트 2368)
-- **Nginx**: 리버스 프록시 및 SSL 터미네이션 (포트 80, 443)
-- **Certbot**: Let's Encrypt SSL 인증서 자동 관리
+- **Nginx**: 리버스 프록시 (포트 80)
+
+> **참고**: 이 설정은 외부 로드 밸런서에서 SSL을 처리하는 환경을 위한 것입니다. VM은 HTTP(80포트)만 노출합니다.
 
 ## 설정 방법
 
@@ -26,34 +27,30 @@ cp .env.example .env
 - `DB_PASSWORD`: 데이터베이스 비밀번호
 - `DB_NAME`: 데이터베이스 이름
 
-### 2. SSL 인증서 초기화
-
-최초 SSL 인증서를 발급받기 위해 초기화 스크립트를 실행하세요:
-
-```bash
-chmod +x init-cert.sh
-./init-cert.sh your-domain.com your-email@example.com
-```
-
-### 3. 컨테이너 실행
+### 2. 컨테이너 실행
 
 ```bash
 docker-compose up -d
 ```
 
-### 4. Ghost 설정
+### 3. Ghost 설정
 
-브라우저에서 `https://yourdomain.com/ghost`에 접속하여 Ghost 관리자 계정을 설정하세요.
+브라우저에서 로드 밸런서를 통해 `https://yourdomain.com/ghost`에 접속하여 Ghost 관리자 계정을 설정하세요.
+
+### 4. 로드 밸런서 설정
+
+외부 로드 밸런서에서 다음과 같이 설정하세요:
+- **백엔드**: 이 VM의 80포트
+- **프로토콜**: HTTP → HTTPS
+- **헬스체크**: `GET /health` (HTTP 200 응답)
 
 ## 디렉토리 구조
 
 ```
 ├── docker-compose.yml      # Docker Compose 설정
-├── init-cert.sh           # SSL 인증서 초기화 스크립트
 ├── nginx/                 # Nginx 설정 파일들
 │   ├── nginx.conf
 │   └── conf.d/
-├── certbot/               # Let's Encrypt 인증서 저장소
 ├── content/               # Ghost 콘텐츠 (테마, 설정 등)
 └── data/                  # Ghost 데이터 및 런타임 파일
 ```
@@ -61,19 +58,10 @@ docker-compose up -d
 ## 주의사항
 
 - `data/` 디렉토리에는 Ghost 데이터베이스와 런타임 파일들이 저장되므로 백업이 필요합니다.
-- `certbot/` 디렉토리에는 SSL 인증서가 저장되므로 보안에 주의하세요.
 - `.env` 파일에는 민감한 정보가 포함되어 있으므로 Git에 커밋하지 마세요.
+- SSL은 외부 로드 밸런서에서 처리되므로, Ghost URL은 HTTPS로 설정하되 이 서버는 HTTP로만 동작합니다.
 
 ## 유지보수
-
-### SSL 인증서 갱신
-
-Certbot이 자동으로 인증서를 갱신하지만, 수동으로 갱신하려면:
-
-```bash
-docker-compose exec certbot certbot renew
-docker-compose exec nginx nginx -s reload
-```
 
 ### 백업
 
@@ -95,7 +83,11 @@ docker-compose logs ghost
 
 # Nginx 로그
 docker-compose logs nginx
+```
 
-# Certbot 로그
-docker-compose logs certbot
+### 헬스체크 확인
+
+```bash
+# 로컬에서 헬스체크 엔드포인트 테스트
+curl http://localhost/health
 ```

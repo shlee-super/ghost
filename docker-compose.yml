@@ -6,13 +6,16 @@ services:
     expose:
       - "2368"
     environment:
-      url: https://leecod.ing
+      url: ${GHOST_URL}
       database__client: mysql2
-      database__connection__host: 10.0.1.224
-      database__connection__port: 3306
-      database__connection__user: admin
-      database__connection__password: Database1059!@!
-      database__connection__database: ghost
+      database__connection__host: ${DB_HOST}
+      database__connection__port: ${DB_PORT}
+      database__connection__user: ${DB_USER}
+      database__connection__password: ${DB_PASSWORD}
+      database__connection__database: ${DB_NAME}
+      # 외부 로드 밸런서 사용시 필요한 설정
+      server__host: 0.0.0.0
+      server__port: 2368
     volumes:
       - ./data/ghost:/var/lib/ghost
     networks:
@@ -24,23 +27,11 @@ services:
     restart: always
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     depends_on:
       - ghost
-    networks:
-      - ghost-network
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     networks:
       - ghost-network
 

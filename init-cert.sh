@@ -1,8 +1,20 @@
 #!/bin/bash
 
-# 도메인과 이메일 설정
-domain="leecod.ing"
-email="shlee.super@gmail.com"
+# SSL 인증서 초기화 스크립트
+# 사용법: ./init-cert.sh <domain> <email>
+
+if [ "$#" -ne 2 ]; then
+    echo "사용법: $0 <domain> <email>"
+    echo "예시: $0 yourdomain.com your-email@example.com"
+    exit 1
+fi
+
+# 매개변수에서 도메인과 이메일 가져오기
+domain="$1"
+email="$2"
+
+echo "도메인: $domain"
+echo "이메일: $email"
 
 # 필요한 디렉토리 생성
 mkdir -p certbot/www
